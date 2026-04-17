@@ -1,0 +1,10 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: spezidb-redirect
+  namespace: default
+spec:
+  redirectRegex:
+    regex: "^https://spezi\\.auch\\.cool(.*)"
+    replacement: "https://spezidb.de${1}"
+    permanent: true

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gatus
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gatus
+  template:
+    metadata:
+      labels:
+        app: gatus
+    spec:
+      containers:
+        - name: gatus
+          image: twinproduction/gatus:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: TELEGRAM_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: gatus-secrets
+                  key: TELEGRAM_TOKEN
+            - name: TELEGRAM_CHAT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: gatus-secrets
+                  key: TELEGRAM_CHAT_ID
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: config
+          configMap:
+            name: gatus-config

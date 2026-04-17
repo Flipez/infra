@@ -1,0 +1,158 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gatus-config
+  namespace: default
+data:
+  config.yaml: |
+    web:
+      port: 8080
+
+    alerting:
+      telegram:
+        token: "${TELEGRAM_TOKEN}"
+        id: "${TELEGRAM_CHAT_ID}"
+        default-alert:
+          enabled: true
+          send-on-resolved: true
+          failure-threshold: 2
+          success-threshold: 1
+
+    endpoints:
+      - name: Matrix
+        url: https://matrix.auch.cool/_matrix/federation/v1/version
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+
+      - name: IRC Relay
+        url: https://irc.auch.cool
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+
+      - name: Memos
+        url: https://memo.auch.cool
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+
+      - name: Herzmut Games
+        url: https://herzmut.games
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+
+      - name: Play Herzmut Games
+        url: https://herzmut.org
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+
+      - name: RocketLang
+        url: https://rocket-lang.org
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+
+      - name: RocketLang Playground
+        url: https://play.rocket-lang.org
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+
+      - name: Auch Cool
+        url: https://auch.cool
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+
+      - name: Jellyfin
+        url: https://jf.flipez.de
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+
+      - name: SpeziDB
+        url: https://spezidb.de/up
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+        alerts:
+          - type: telegram
+
+      - name: Hetzner
+        group: Hetzner
+        url: https://hetzner.com
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+
+      - name: Hetzner Career
+        group: Hetzner
+        url: https://career.hetzner.com/
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+
+      - name: Hetzner Cloud
+        group: Hetzner
+        url: https://hetzner-cloud.de
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+
+      - name: Metrics
+        group: MVG Observatory
+        url: http://data.mvg.auch.cool:9292/
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+          - "[BODY] contains 'OK'"
+        alerts:
+          - type: telegram
+
+      - name: Landing Page
+        group: MVG Observatory
+        url: https://mvg.auch.cool/
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+          - "[BODY] contains 'Observatory'"
+        alerts:
+          - type: telegram
+
+      - name: Grafana
+        group: MVG Observatory
+        url: https://grafana.mvg.auch.cool/login
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+          - "[BODY] contains 'Grafana'"
+        alerts:
+          - type: telegram
+
+      - name: Clickhouse
+        group: MVG Observatory
+        url: tcp://hc-200025.auch.cool:9000
+        interval: 60s
+        conditions:
+          - "[CONNECTED] == true"
+        alerts:
+          - type: telegram
+
+      - name: Metabase
+        group: MVG Observatory
+        url: https://metabase.auch.cool/api/health
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+
+      - name: Observer Interactive App
+        group: MVG Observatory
+        url: https://mvg.observer/api/health
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+        alerts:
+          - type: telegram

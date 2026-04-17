@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: synapse
-          image: matrixdotorg/synapse:latest
+          image: matrixdotorg/synapse:v1.151.0
           env:
             - name: SYNAPSE_CONFIG_PATH
               value: /data/homeserver.yaml

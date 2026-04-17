@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matrix
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: matrix
+  template:
+    metadata:
+      labels:
+        app: matrix
+    spec:
+      containers:
+        - name: synapse
+          image: matrixdotorg/synapse:latest
+          env:
+            - name: SYNAPSE_CONFIG_PATH
+              value: /data/homeserver.yaml
+          ports:
+            - containerPort: 8008
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: matrix-data

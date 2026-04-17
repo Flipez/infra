@@ -108,7 +108,7 @@ data:
         interval: 60s
         conditions:
           - "[STATUS] == 200"
-          - "[BODY] contains 'OK'"
+          - "[BODY] contains OK"
         alerts:
           - type: telegram
 
@@ -118,7 +118,7 @@ data:
         interval: 60s
         conditions:
           - "[STATUS] == 200"
-          - "[BODY] contains 'Observatory'"
+          - "[BODY] contains Observatory"
         alerts:
           - type: telegram
 
@@ -128,7 +128,7 @@ data:
         interval: 60s
         conditions:
           - "[STATUS] == 200"
-          - "[BODY] contains 'Grafana'"
+          - "[BODY] contains Grafana"
         alerts:
           - type: telegram
 

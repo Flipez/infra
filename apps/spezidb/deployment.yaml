@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spezidb
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spezidb
+  template:
+    metadata:
+      labels:
+        app: spezidb
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: spezidb
+          image: flipez/spezidb:latest
+          command: ["bash", "-c", "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"]
+          ports:
+            - containerPort: 3000
+          env:
+            - name: RAILS_ENV
+              value: production
+            - name: RAILS_SERVE_STATIC_FILES
+              value: "true"
+            - name: RAILS_LOG_TO_STDOUT
+              value: "true"
+            - name: GOOGLE_CLIENT_ID
+              value: "718316613228-6n1ujlatpk95iu4re2m4v2ci7a2bboq4.apps.googleusercontent.com"
+            - name: GITHUB_CLIENT_ID
+              value: "Ov23livoyCsLBFpeXe9J"
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: spezidb-secrets
+                  key: SECRET_KEY_BASE
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: spezidb-secrets
+                  key: GOOGLE_CLIENT_SECRET
+            - name: GITHUB_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: spezidb-secrets
+                  key: GITHUB_CLIENT_SECRET
+          volumeMounts:
+            - name: storage
+              mountPath: /rails/storage
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: spezidb-storage

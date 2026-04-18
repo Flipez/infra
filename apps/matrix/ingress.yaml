@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: matrix
+  namespace: default
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: matrix.auch.cool
+      http:
+        paths:
+          - path: /_matrix
+            pathType: Prefix
+            backend:
+              service:
+                name: matrix
+                port:
+                  number: 8008
+          - path: /_synapse/client
+            pathType: Prefix
+            backend:
+              service:
+                name: matrix
+                port:
+                  number: 8008
+  tls:
+    - hosts:
+        - matrix.auch.cool
+      secretName: matrix-tls

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thelounge
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: thelounge
+  template:
+    metadata:
+      labels:
+        app: thelounge
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: thelounge
+          image: thelounge/thelounge:4.4.3
+          ports:
+            - containerPort: 9000
+          volumeMounts:
+            - name: data
+              mountPath: /var/opt/thelounge
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: thelounge-data

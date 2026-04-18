@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rallly
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rallly
+  template:
+    metadata:
+      labels:
+        app: rallly
+    spec:
+      containers:
+        - name: rallly
+          image: lukevella/rallly:4.8.1
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NEXT_PUBLIC_BASE_URL
+              value: "https://rallly.auch.cool"
+            - name: ALLOWED_EMAILS
+              value: "rally@flipez.net,flipez9422@googlemail.com,rmuller@mozilla.com"
+            - name: SUPPORT_EMAIL
+              value: "rally@flipez.net"
+            - name: GOOGLE_CLIENT_ID
+              value: "735905204570-hioqlhu9pu1tn4834n0ve0a38ke6dvkf.apps.googleusercontent.com"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: rallly-secrets
+                  key: DATABASE_URL
+            - name: SECRET_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rallly-secrets
+                  key: SECRET_PASSWORD
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: rallly-secrets
+                  key: GOOGLE_CLIENT_SECRET

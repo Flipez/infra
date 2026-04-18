@@ -1,0 +1,52 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: spezidb
+  namespace: default
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: spezidb.de
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: spezidb
+                port:
+                  number: 3000
+  tls:
+    - hosts:
+        - spezidb.de
+      secretName: spezidb-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: spezidb-redirect
+  namespace: default
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: default-spezidb-redirect@kubernetescrd
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: spezi.auch.cool
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: spezidb
+                port:
+                  number: 3000
+  tls:
+    - hosts:
+        - spezi.auch.cool
+      secretName: spezi-auch-cool-tls

@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trek
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trek
+  template:
+    metadata:
+      labels:
+        app: trek
+    spec:
+      containers:
+        - name: trek
+          image: mauriceboe/trek:latest
+          ports:
+            - containerPort: 3000
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+              add: ["CHOWN", "SETUID", "SETGID"]
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: PORT
+              value: "3000"
+            - name: LOG_LEVEL
+              value: info
+            - name: FORCE_HTTPS
+              value: "true"
+            - name: TRUST_PROXY
+              value: "1"
+            - name: APP_URL
+              value: "https://trek.auch.cool"
+            - name: ALLOWED_ORIGINS
+              value: "https://trek.auch.cool"
+            - name: ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: trek-secrets
+                  key: ENCRYPTION_KEY
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+            - name: uploads
+              mountPath: /app/uploads
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: trek-data
+        - name: uploads
+          persistentVolumeClaim:
+            claimName: trek-uploads
+        - name: tmp
+          emptyDir:
+            medium: Memory
+            sizeLimit: 64Mi

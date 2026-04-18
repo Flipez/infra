@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vikunja
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vikunja
+  template:
+    metadata:
+      labels:
+        app: vikunja
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: vikunja
+          image: vikunja/vikunja
+          ports:
+            - containerPort: 3456
+          env:
+            - name: VIKUNJA_SERVICE_JWTSECRET
+              valueFrom:
+                secretKeyRef:
+                  name: vikunja-secrets
+                  key: VIKUNJA_SERVICE_JWTSECRET
+            - name: VIKUNJA_SERVICE_PUBLICURL
+              value: "https://tasks.auch.cool/"
+            - name: VIKUNJA_DATABASE_PATH
+              value: /db/vikunja.db
+            - name: VIKUNJA_SERVICE_ENABLEREGISTRATION
+              value: "false"
+          volumeMounts:
+            - name: data
+              mountPath: /app/vikunja/files
+              subPath: files
+            - name: data
+              mountPath: /db
+              subPath: db
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: vikunja-data

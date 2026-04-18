@@ -2,12 +2,20 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
   "kubernetes": {
-    "fileMatch": ["apps/.+\\.yaml$", "infrastructure/.+\\.yaml$"]
+    "managerFilePatterns": [
+      "/apps/.+\\.yaml$/",
+      "/infrastructure/.+\\.yaml$/"
+    ]
   },
   "helm-values": {
-    "fileMatch": ["infrastructure/.+\\.yaml$"]
+    "managerFilePatterns": [
+      "/infrastructure/.+\\.yaml$/"
+    ]
   },
   "argocd": {
-    "fileMatch": ["clusters/.+\\.yaml$", "infrastructure/.+\\.yaml$"]
+    "managerFilePatterns": [
+      "/clusters/.+\\.yaml$/",
+      "/infrastructure/.+\\.yaml$/"
+    ]
   }
 }

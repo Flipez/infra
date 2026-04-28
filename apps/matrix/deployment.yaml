@@ -17,7 +17,7 @@ spec:
         fsGroup: 991
       containers:
         - name: synapse
-          image: matrixdotorg/synapse:v1.151.0
+          image: matrixdotorg/synapse:v1.152.0
           env:
             - name: SYNAPSE_CONFIG_PATH
               value: /data/homeserver.yaml

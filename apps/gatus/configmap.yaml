@@ -111,6 +111,14 @@ data:
         alerts:
           - type: telegram
 
+      - name: DiveApp
+        url: https://dive.shmbrt.de
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+        alerts:
+          - type: telegram
+
       - name: SpeziDB
         url: https://spezidb.de/up
         interval: 60s

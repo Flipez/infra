@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: diveapp
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: diveapp
+  template:
+    metadata:
+      labels:
+        app: diveapp
+    spec:
+      containers:
+        - name: diveapp
+          image: ghcr.io/flipez/dive:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: GOOGLE_CLIENT_ID
+              value: "838920310645-c9r3of0jj3b4o14004m8b7jipkgajosv.apps.googleusercontent.com"
+            - name: FRONTEND_URL
+              value: "https://dive.shmbrt.de"
+            - name: BACKEND_URL
+              value: "https://dive.shmbrt.de"
+            - name: ENVIRONMENT
+              value: "production"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: diveapp-secrets
+                  key: DATABASE_URL
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: diveapp-secrets
+                  key: GOOGLE_CLIENT_SECRET
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: diveapp-secrets
+                  key: JWT_SECRET

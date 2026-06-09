@@ -16,6 +16,7 @@ spec:
       containers:
         - name: diveapp
           image: ghcr.io/flipez/dive:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
           env:

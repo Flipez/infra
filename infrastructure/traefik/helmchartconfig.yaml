@@ -1,0 +1,16 @@
+# Overrides values of the k3s built-in Traefik HelmChart.
+# Must be named "traefik" in kube-system to be picked up by the k3s helm controller.
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    additionalArguments:
+      # Redirect all plain HTTP traffic on the web entrypoint to HTTPS.
+      # ":443" (the exposed port) instead of "websecure" so the redirect
+      # doesn't point at the container port 8443.
+      - "--entryPoints.web.http.redirections.entryPoint.to=:443"
+      - "--entryPoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entryPoints.web.http.redirections.entryPoint.permanent=true"

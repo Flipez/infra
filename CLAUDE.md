@@ -48,7 +48,8 @@ infra/
 ├── infrastructure/
 │   ├── argocd/                     ← ArgoCD ingress + insecure mode config
 │   ├── cert-manager/               ← ClusterIssuer (Let's Encrypt)
-│   └── monitoring/                 ← kube-prometheus-stack ArgoCD Application
+│   ├── monitoring/                 ← kube-prometheus-stack ArgoCD Application
+│   └── traefik/                    ← HelmChartConfig for k3s Traefik (global HTTP → HTTPS redirect)
 ├── apps/
 │   └── <name>/
 │       ├── deployment.yaml

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clickhouse-monitoring
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: clickhouse-monitoring
+  template:
+    metadata:
+      labels:
+        app: clickhouse-monitoring
+    spec:
+      containers:
+        - name: clickhouse-monitoring
+          image: ghcr.io/chmonitor/chmonitor:0.3.11
+          ports:
+            - containerPort: 3000
+          env:
+            - name: CLICKHOUSE_HOST
+              value: "http://hc-200025.auch.cool:8123"
+            - name: CLICKHOUSE_USER
+              value: "default"
+            - name: CLICKHOUSE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: clickhouse-monitoring-secrets
+                  key: CLICKHOUSE_PASSWORD
+            - name: CLICKHOUSE_TZ
+              value: "Europe/Berlin"
+            - name: CLICKHOUSE_MAX_EXECUTION_TIME
+              value: "15"
+            - name: NEXT_QUERY_CACHE_TTL
+              value: "86400"

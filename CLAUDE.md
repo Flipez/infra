@@ -154,6 +154,7 @@ Never commit plaintext Kubernetes Secret objects.
 | Gatus | `status.flipez.de`, `status.auch.cool` | Status page, replaced Uptime Kuma, SQLite persistence, Telegram alerts on all endpoints |
 | Rallly | `rallly.auch.cool` | Scheduling app, PostgreSQL backend, pinned to 4.8.1 |
 | Trek | `trek.auch.cool` | Travel tracker, two PVCs (data + uploads), read-only filesystem, pinned to latest |
+| ClickHouse Monitoring | `stats.clickhouse.auch.cool` | chmonitor, stateless, ClickHouse password via Sealed Secrets, pinned to 0.3.11 |
 
 ## Future: NAS cluster
 
